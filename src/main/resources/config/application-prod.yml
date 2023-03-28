@@ -1,0 +1,40 @@
+logging:
+  level:
+    ROOT: INFO
+    ir.zohoorchi.accounting: INFO
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+    add-properties: false
+  liquibase:
+    contexts: prod
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  server:
+    port: '8182'
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      probes:
+        enabled: 'true'
+      show-details: always
+    info:
+      enabled: 'true'
+  health:
+    liveness-state:
+      enabled: true
+    readiness-state:
+      enabled: true
+
