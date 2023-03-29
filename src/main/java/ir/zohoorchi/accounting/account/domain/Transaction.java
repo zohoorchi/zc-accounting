@@ -17,7 +17,4 @@ public class Transaction {
 	@Getter
 	private final Journal journal;
 
-	@Getter
-	private TransactionStatus status;
-
 }

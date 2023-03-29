@@ -15,9 +15,4 @@ public class TransactionEntry {
 	@Getter
 	Money amount;
 
-	public TransactionStatus getStatus() {
-		return transaction.getStatus();
-	}
-
-
 }

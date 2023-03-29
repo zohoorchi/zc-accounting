@@ -3,64 +3,75 @@ package ir.zohoorchi.accounting.account.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Account {
 
 	@Getter
 	private AccountId id;
 
 	@Getter
-	private Money amount;
-
-	@Getter
 	private AccountOwner owner;
 
 	@Getter
-	private Money totalIncome;
-
-	@Getter
-	private Money totalOutcome;
-
-	@Getter
-	private Money debt;
+	private Money cash;
 
 	@Getter
 	private Money credit;
 
-
 	/**
-	 * Tries to withdraw a certain value of money from this account.
+	 * Tries to withdraw a certain value of money from this account cash.
 	 * @return true if the withdrawal was successful, false if not.
 	 */
-	public boolean withdraw(Money money) {
+	public boolean withdrawOfCash(Money money) {
 
-		if (!mayWithdraw(money)) {
+		if (!mayWithdrawOfCash(money)) {
 			return false;
 		}
-		amount = amount.minus(money);
-		totalOutcome = totalOutcome.plus(money);
+		cash = cash.minus(money);
 		return true;
 	}
 
 	/**
-	 * Tries to deposit a certain amount of money to this account.
+	 * Tries to deposit a certain amount of money to this account cash.
 	 * @return true if the deposit was successful, false if not.
 	 */
-	public boolean deposit(Money money) {
+	public boolean depositOfCash(Money money) {
 		if (money.isNegative())
 			return false;
-		amount = amount.plus(money);
-		totalIncome = totalIncome.plus(money);
+		cash = cash.plus(money);
 		return true;
 	}
 
-	private boolean mayWithdraw(Money money) {
-		return money.isPositiveOrZero() && amount.minus(money).isPositiveOrZero();
+	public boolean withdrawOfCredit(Money money) {
+		if (!mayWithdrawOfCredit(money)) {
+			return false;
+		}
+		credit = credit.minus(money);
+		return true;
+	}
+
+	public boolean depositOfCredit(Money money) {
+		if (money.isNegative())
+			return false;
+		credit = credit.plus(money);
+		return true;
+	}
+
+	protected boolean mayWithdrawOfCredit(Money money) {
+		return money.isPositiveOrZero();
+	}
+
+	protected boolean mayWithdrawOfCash(Money money) {
+		return money.isPositiveOrZero() && cash.minus(money).isPositiveOrZero();
 	}
 
 	public record AccountId(long value) {
+	}
+
+	public boolean isSame(Account another) {
+		return cash.equals(another.cash) &&
+				credit.equals(another.credit);
 	}
 
 }

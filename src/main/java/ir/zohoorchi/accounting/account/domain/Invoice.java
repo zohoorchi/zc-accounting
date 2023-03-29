@@ -21,6 +21,9 @@ public class Invoice {
 	private final Money amount;
 
 	@Getter
+	private BillingCycle billingCycle;
+
+	@Getter
 	private InvoiceStatus status;
 
 	@Getter
